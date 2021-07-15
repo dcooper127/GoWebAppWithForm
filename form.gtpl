@@ -29,9 +29,10 @@
             Word 2:<input type="text" name="ip2">
             <input type="submit" value="Submit">
         </form>
-        Result: {{.Input1}} and {{.Input2}} {{.Result}}
+        Result: {{.Result}}
     </body>
 
-    <div class ="myText"> Github source code: https://github.com/dcooper127/GoPrograms</div>
+    <p>Github source code: https://github.com/dcooper127/GoPrograms</p>
+
 
 </html>

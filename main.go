@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-type myValues struct{
+type myValues struct {
 	Input1 string
 	Input2 string
 	Result string
@@ -26,9 +26,8 @@ func isAnagram(word1 string, word2 string) bool {
 
 	//
 
-
 	//itterate over word 1
-	for _,char := range word1 {
+	for _, char := range word1 {
 		charCount, present := letterCounts[string(char)]
 		if !(present) {
 			letterCounts[string(char)] = 1
@@ -37,7 +36,7 @@ func isAnagram(word1 string, word2 string) bool {
 		}
 	}
 
-	for _,char := range word2 {
+	for _, char := range word2 {
 		charCount, present := letterCounts[string(char)]
 		if !(present) {
 			letterCounts[string(char)] = -1
@@ -47,8 +46,8 @@ func isAnagram(word1 string, word2 string) bool {
 	}
 
 	//itterate over word 2
-	for _,v := range letterCounts {
-		if(v != 0) {
+	for _, v := range letterCounts {
+		if v != 0 {
 			return false
 		}
 	}
@@ -58,21 +57,34 @@ func isAnagram(word1 string, word2 string) bool {
 
 func testFunc(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+		word1 := ""
+		word2 := ""
+		result := ""
+
+		values := myValues{Input1: word1, Input2: word2, Result: result}
+
 		t, _ := template.ParseFiles("form.gtpl")
-		t.Execute(w, "")
+		t.Execute(w, values)
 	} else {
 		r.ParseForm()
-		output := isAnagram(r.Form["ip1"][0] ,r.Form["ip2"][0])
+
+		//word1 := r.Form["ip1"][0]
+		//word2 := r.Form["ip2"][0]
+
+		word1 := "test"
+		word2 := "best"
+
+		output := isAnagram(word1, word2)
 
 		outputString := ""
 
 		if output {
-			outputString = "are anagrams."
+			outputString = word1 + " and " + word2 + " are anagrams."
 		} else {
-			outputString = "are not anagrams."
+			outputString = word1 + " and " + word2 + "are not anagrams."
 		}
 
-		values := myValues{Input1: r.Form["ip1"][0] ,Input2: r.Form["ip2"][0], Result: outputString}
+		values := myValues{Input1: word1, Input2: word2, Result: outputString}
 
 		t, _ := template.ParseFiles("form.gtpl")
 		t.Execute(w, values)
@@ -81,6 +93,6 @@ func testFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/",testFunc)
+	http.HandleFunc("/", testFunc)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
